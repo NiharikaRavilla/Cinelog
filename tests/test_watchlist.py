@@ -8,6 +8,7 @@ from services.collection_service import FilmNotFoundError
 from services.watchlist_service import (
     AlreadyInWatchlistError,
     add_to_watchlist,
+    get_watchlist,
     remove_from_watchlist,
 )
 
@@ -85,3 +86,17 @@ def test_add_to_watchlist_respects_private_visibility(
         )
 
         assert entry.public is False
+
+
+def test_get_watchlist_returns_titles_alphabetically(app, sample_user):
+    with app.app_context():
+        film_b = Film(title="Zodiac", year=2007)
+        film_a = Film(title="Arrival", year=2016)
+        db.session.add_all([film_b, film_a])
+        db.session.commit()
+
+        add_to_watchlist(sample_user, film_b.id)
+        add_to_watchlist(sample_user, film_a.id)
+
+        titles = [film["title"] for film in get_watchlist(sample_user)]
+        assert titles == ["Arrival", "Zodiac"]
