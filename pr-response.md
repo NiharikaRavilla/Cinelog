@@ -55,7 +55,7 @@ I split the work into separate commits for the rename, duplicate handling, stret
 ## Stretch Features
 
 - I added `remove_from_watchlist()` and a matching DELETE endpoint. The removal test confirms the entry is gone afterward.
-- I added a duplicate-entry test because repeated clicks or requests should not create extra rows.
+- I added an alphabetical-order test that inserts films in reverse title order. I chose it because sorting is part of the Comment 5 decision and was not covered by the requested nonexistent-film test. This test also caught a missing `WatchlistEntry` relationship, which I fixed so the GET endpoint can load each film.
 - I added an optional `public` value to the add endpoint and tested that `false` is stored correctly.
 
 ## PR Description
